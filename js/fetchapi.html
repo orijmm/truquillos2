@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>css</title>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+
+</head>
+<body>
+
+	<div class="container">
+	  <div class="row">
+	    <div class="col-md-4 col-sm-12 border d-flex align-items-end">
+<button class="btn btn-success" onclick="showdata('serena')">aqui</button>	 
+<button onclick="showotro()" class="btn btn-info">otro</button> 
+<button onclick="ajaxget1()" class="btn btn-warning">ajax</button> 
+
+  </div>
+	    <div id="aquiset" class="col-md-4 col-sm-12 border">
+	      nombre	
+	    </div>
+	    <div id="aquiset2" class="col-md-4 col-sm-12 border">
+	      email
+	    </div>
+	  </div>
+	</div>
+
+	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+	<script type="text/javascript">
+		function showdata(sucursal) {
+			fetch('https://randomuser.me/api')
+			  .then(response => response.json())
+			  .then(commits => {
+			  		console.log(commits.results[0].name);
+			  		document.getElementById("aquiset").innerHTML = `${commits.results[0].name.first} ${commits.results[0].name.last}`;
+			  		
+			  		//document.getElementById("aquiset2").innerHTML = '';
+			  		
+			  	}
+			  	);
+		}
+
+		//otro ejemplo
+		const showotro = ()=>{
+			const uri = 'http://jsonplaceholder.typicode.com/users';
+			//new Headers()
+			// headers.append(name, value)
+			// Content-Type, Content-Length, Accept, Accept-Language,
+			// X-Requested-With, User-Agent
+			let h = new Headers();
+			h.append('Accept', 'application/json');
+
+			let req = new Request(uri, {
+			    method: 'GET',
+			    headers: h,
+			    mode: 'cors'
+			});
+
+			fetch(req)
+			    .then( (response)=>{
+			        if(response.ok){
+			            return response.json();
+			        }else{
+			            throw new Error('BAD HTTP stuff');
+			        }
+			    })
+			    .then( (jsonData) =>{
+			        console.log(jsonData[0]);
+			        document.getElementById("aquiset2").innerHTML = jsonData[0].name;
+
+			    })
+			    .catch( (err) =>{
+			        console.log('ERROR:', err.message);
+			    });
+		}
+
+		//con ajax
+		function ajaxget1(){
+			$.ajax({
+			  url: 'http://dummy.restapiexample.com/api/v1/employees',
+			  dataType: 'json',
+			  success: function(data) {
+			    console.log(data.data[0]);
+				  },
+			  error: function (xhr, ajaxOptions, thrownError) {
+		        console.log('status: '+xhr.statusText);
+		        console.log('error: '+ajaxOptions);
+		      }
+			});
+		}
+
+	</script>
+</body>
+</html>
